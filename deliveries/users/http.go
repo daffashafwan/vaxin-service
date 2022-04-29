@@ -31,7 +31,7 @@ func (userController UserController) Login(c echo.Context) error {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 
-	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(user))
+	return response.SuccessResponse(c, http.StatusOK, responses.FromDomain(user))
 }
 
 func (userController UserController) Register(c echo.Context) error {
@@ -45,5 +45,34 @@ func (userController UserController) Register(c echo.Context) error {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 
-	return response.SuccessResponse(c,http.StatusOK, responses.FromDomain(user))
+	return response.SuccessResponse(c, http.StatusOK, responses.FromDomain(user))
+}
+
+func (userController UserController) Verify(c echo.Context) error {
+	ctxNative := c.Request().Context()
+	token := c.Param("token")
+	data, err := userController.UserUseCase.GetByToken(ctxNative, token)
+	if data.Status == "1" {
+		return response.SuccessResponse(c, http.StatusOK, "Anda Sudah Pernah Melakukan Verifikasi")
+	}
+	if err != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())
+	}
+	userVerif := requests.UserVerify{
+		Id:       data.Id,
+		Name:     data.Name,
+		Username: data.Username,
+		Token:    data.Token,
+		Status:   "1",
+		Password: data.Password,
+		Email:    data.Email,
+	}
+	c.Bind(&userVerif)
+	ctx := c.Request().Context()
+	data, errs := userController.UserUseCase.Verify(ctx, userVerif.ToDomain(), data.Id)
+	if errs != nil {
+		return response.ErrorResponse(c, http.StatusInternalServerError, errs.Error())
+	}
+
+	return response.SuccessResponse(c, http.StatusOK, responses.FromDomain(data))
 }

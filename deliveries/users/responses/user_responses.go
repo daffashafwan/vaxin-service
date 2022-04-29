@@ -10,7 +10,6 @@ type UserResponse struct {
 	Email     string    `json:"email"`
 	Username  string    `json:"username"`
 	JWTToken  string    `json:"jwtToken"`
-	Status    string    `json:"status"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
@@ -21,7 +20,6 @@ func FromDomain(domain users.Domain) UserResponse {
 		Username:  domain.Username,
 		Email:     domain.Email,
 		JWTToken:  domain.JWTToken,
-		Status:    domain.Status,
 		CreatedAt: domain.CreatedAt,
 		UpdatedAt: domain.UpdatedAt,
 	}

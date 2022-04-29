@@ -25,10 +25,10 @@ type Usecase interface {
 	// ResetPassword(ctx context.Context, password string, retypePassword string, id int) (Domain, error)
 	// GetAll(ctx context.Context) ([]Domain, error)
 	// GetById(ctx context.Context, id int) (Domain, error)
-	// GetByToken(ctx context.Context, token string) (Domain, error)
+	GetByToken(ctx context.Context, token string) (Domain, error)
 	// ForgotPassword(ctx context.Context, email string) (Domain, error)
 	// Delete(ctx context.Context, id int) error
-	// Verify(ctx context.Context, domain Domain, id int) (Domain, error)
+	Verify(ctx context.Context, domain Domain, id int) (Domain, error)
 }
 
 type Repository interface {

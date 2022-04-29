@@ -61,7 +61,7 @@ func (uc *UserUsecase) Create(ctx context.Context, domain Domain) (Domain, error
 	if err != nil {
 		return Domain{}, err
 	}
-	email.SendEmail(ctx, domain.Email, "Verifikasi Email", "<a href=`https://localhost/users/verify/"+domain.Token+"`>Link Verifikasi</a>")
+	email.SendEmail(ctx, domain.Email, "Verifikasi Email", "<a href=`http://localhost:1333/users/verify/"+domain.Token+"`>Link Verifikasi</a>")
 
 	return user, nil
 }
@@ -87,4 +87,24 @@ func (uc *UserUsecase) Login(ctx context.Context, domain Domain) (Domain, error)
 	}
 
 	return user,  nil
+}
+
+func (uc *UserUsecase) Verify(ctx context.Context, domain Domain, id int) (Domain, error) {
+	domain.Status = "1"
+	user, err := uc.Repo.Update(ctx, domain)
+	if err != nil {
+		return Domain{}, err
+	}
+	return user, nil
+}
+
+func (uc *UserUsecase) GetByToken(ctx context.Context, token string) (Domain, error) {
+	user, err := uc.Repo.GetByToken(ctx, token)
+	if err != nil {
+		return Domain{}, err
+	}
+	if user.Id == 0 {
+		return Domain{}, errors.ErrIDNotFound
+	}
+	return user, nil
 }
