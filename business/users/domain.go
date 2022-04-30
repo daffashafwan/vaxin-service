@@ -14,8 +14,8 @@ type Domain struct {
 	Status    string    `json:"status"`
 	Email     string    `json:"email"`
 	JWTToken  string    `json:"jwtToken"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type Usecase interface {

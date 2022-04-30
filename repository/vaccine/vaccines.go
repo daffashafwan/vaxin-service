@@ -9,8 +9,8 @@ type Vaccine struct {
 	Id        int    `gorm:"primaryKey;auto_increment" json:"id"`
 	Name      string `gorm:"size:255;not null" json:"name"`
 	Type      string `gorm:"size:255;not null" json:"type"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func (vacc *Vaccine) ToDomain() vaccines.Domain {
