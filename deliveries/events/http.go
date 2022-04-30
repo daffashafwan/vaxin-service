@@ -1,10 +1,8 @@
 package events
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
-
 	"github.com/daffashafwan/vaxin-service/business/events"
 	"github.com/daffashafwan/vaxin-service/deliveries/events/requests"
 	"github.com/daffashafwan/vaxin-service/deliveries/events/responses"
@@ -46,7 +44,6 @@ func (eventsController EventController) GetById(c echo.Context) error {
 	ctxNative := c.Request().Context()
 	id := c.Param("eid")
 	convId, _ := strconv.Atoi(id)
-	fmt.Println("tes")
 	data, err := eventsController.EventUsecase.GetById(ctxNative, convId)
 	if err != nil {
 		return response.ErrorResponse(c, http.StatusInternalServerError, err.Error())

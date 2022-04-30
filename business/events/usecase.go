@@ -96,6 +96,8 @@ func (ic *EventUsecase) UpdateQuota(ctx context.Context, domain Domain, id int) 
 	if err != nil {
 		return Domain{}, err
 	}
+	events.Facility = event.Facility
+	events.Vaccine = event.Vaccine
 
 	return events, nil
 }

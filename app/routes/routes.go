@@ -91,6 +91,9 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 
 	//edit
 	e.PUT("events/:eid", cl.EventController.Update, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+
+	//edit quota
+	e.PUT("events/:eid/quota", cl.EventController.UpdateStock, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
 	
 	//delete
 	e.DELETE("events/:eid", cl.EventController.Delete, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)

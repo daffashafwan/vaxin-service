@@ -2,7 +2,6 @@ package requests
 
 import (
 	"github.com/daffashafwan/vaxin-service/business/events"
-	"strconv"
 )
 
 type EventRequest struct {
@@ -15,13 +14,12 @@ type EventRequest struct {
 }
 
 type ItemRequestQuota struct {
-	Quota string `json:"quota"`
+	Quota int `json:"quota"`
 }
 
 func (item *ItemRequestQuota) QuotaToDomain() events.Domain {
-	stockR, _ := strconv.Atoi(item.Quota)
 	return events.Domain{
-		Quota: stockR,
+		Quota: item.Quota,
 	}
 }
 
