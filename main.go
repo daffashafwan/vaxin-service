@@ -1,13 +1,19 @@
 package main
 
-import(
-	"time"
+import (
 	_middleware "github.com/daffashafwan/vaxin-service/app/middlewares"
-	_userUsecase "github.com/daffashafwan/vaxin-service/business/users"
 	_mysqlDriver "github.com/daffashafwan/vaxin-service/config"
+	"time"
+
+	_userUsecase "github.com/daffashafwan/vaxin-service/business/users"
 	_userController "github.com/daffashafwan/vaxin-service/deliveries/users"
-	_userdb "github.com/daffashafwan/vaxin-service/repository/user"
 	_userRepository "github.com/daffashafwan/vaxin-service/repository/user"
+	_userdb "github.com/daffashafwan/vaxin-service/repository/user"
+
+	_adminUsecase "github.com/daffashafwan/vaxin-service/business/admins"
+	_adminController "github.com/daffashafwan/vaxin-service/deliveries/admins"
+	_adminRepository "github.com/daffashafwan/vaxin-service/repository/admin"
+	_admindb "github.com/daffashafwan/vaxin-service/repository/admin"
 
 	"github.com/daffashafwan/vaxin-service/app/routes"
 
@@ -34,7 +40,8 @@ func init() {
 
 func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(
-		&_userdb.User{})
+		&_userdb.User{},
+		&_admindb.Admin{})
 }
 
 func main() {
@@ -67,14 +74,16 @@ func main() {
 	userUseCase := _userUsecase.NewUserUsecase(userRepository, timeoutContext, configJWT)
 	userController := _userController.NewUserController(userUseCase)
 
+	adminRepository := _adminRepository.CreateAdminRepo(Conn)
+	adminUseCase := _adminUsecase.NewUsecase(adminRepository, timeoutContext, configJWT)
+	adminController := _adminController.NewAdminController(adminUseCase)
+
 	routesInit := routes.ControllerList{
-		JwtConfig:             configJWT.Init(),
-		UserController:        *userController,
+		JwtConfig:       configJWT.Init(),
+		UserController:  *userController,
+		AdminController: *adminController,
 	}
 
 	routesInit.RouteRegister(e)
 	log.Fatal(e.Start(viper.GetString("server.address")))
 }
-
-
-
