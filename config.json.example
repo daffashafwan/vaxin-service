@@ -1,0 +1,25 @@
+{
+    "debug": true,
+    "server": {
+      "address": ":1333"
+    },
+    "context": {
+      "timeout": 2
+    },
+    "database": {
+      "host": "",
+      "port": "",
+      "user": "",
+      "pass": "",
+      "name": ""
+    },
+    "email": {
+      "email": "",
+      "password": ""
+    },
+    "jwt": {
+      "secret": "",
+      "expired": 72
+    }
+  }
+  
