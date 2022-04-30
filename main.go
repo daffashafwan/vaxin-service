@@ -15,6 +15,16 @@ import (
 	_adminRepository "github.com/daffashafwan/vaxin-service/repository/admin"
 	_admindb "github.com/daffashafwan/vaxin-service/repository/admin"
 
+	_vaccineUsecase "github.com/daffashafwan/vaxin-service/business/vaccines"
+	_vaccineController "github.com/daffashafwan/vaxin-service/deliveries/vaccines"
+	_vaccineRepository "github.com/daffashafwan/vaxin-service/repository/vaccine"
+	_vaccinedb "github.com/daffashafwan/vaxin-service/repository/vaccine"
+
+	_facilityUsecase "github.com/daffashafwan/vaxin-service/business/facilities"
+	_facilityController "github.com/daffashafwan/vaxin-service/deliveries/facilities"
+	_facilityRepository "github.com/daffashafwan/vaxin-service/repository/facility"
+	_facilitydb "github.com/daffashafwan/vaxin-service/repository/facility"
+
 	"github.com/daffashafwan/vaxin-service/app/routes"
 
 	"log"
@@ -41,7 +51,9 @@ func init() {
 func DbMigrate(db *gorm.DB) {
 	db.AutoMigrate(
 		&_userdb.User{},
-		&_admindb.Admin{})
+		&_admindb.Admin{},
+		&_vaccinedb.Vaccine{},
+		&_facilitydb.Facility{})
 }
 
 func main() {
@@ -78,10 +90,20 @@ func main() {
 	adminUseCase := _adminUsecase.NewUsecase(adminRepository, timeoutContext, configJWT)
 	adminController := _adminController.NewAdminController(adminUseCase)
 
+	vaccineRepository := _vaccineRepository.CreateVaccineRepo(Conn)
+	vaccineUseCase := _vaccineUsecase.NewVaccineUsecase(vaccineRepository, timeoutContext, configJWT)
+	vaccineController := _vaccineController.NewVaccineController(vaccineUseCase)
+
+	facilityRepository := _facilityRepository.CreateFacilityRepo(Conn)
+	facilityUseCase := _facilityUsecase.NewFacilityUsecase(facilityRepository, timeoutContext, configJWT)
+	facilityController := _facilityController.NewFacilityController(facilityUseCase)
+
 	routesInit := routes.ControllerList{
 		JwtConfig:       configJWT.Init(),
 		UserController:  *userController,
 		AdminController: *adminController,
+		VaccineController: *vaccineController,
+		FacilityController: *facilityController,
 	}
 
 	routesInit.RouteRegister(e)
