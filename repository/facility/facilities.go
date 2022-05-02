@@ -11,8 +11,8 @@ type Facility struct {
 	Latitude  string `gorm:"size:255;not null" json:"latitude"`
 	Longitude string `gorm:"size:255;not null" json:"longitude"`
 	UrlMaps   string `gorm:"size:255;" json:"url_maps"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func (fac *Facility) ToDomain() facilities.Domain {

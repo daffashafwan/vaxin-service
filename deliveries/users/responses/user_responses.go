@@ -10,8 +10,8 @@ type UserResponse struct {
 	Email     string    `json:"email"`
 	Username  string    `json:"username"`
 	JWTToken  string    `json:"jwtToken"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func FromDomain(domain users.Domain) UserResponse {

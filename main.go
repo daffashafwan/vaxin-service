@@ -25,6 +25,16 @@ import (
 	_facilityRepository "github.com/daffashafwan/vaxin-service/repository/facility"
 	_facilitydb "github.com/daffashafwan/vaxin-service/repository/facility"
 
+	_eventUsecase "github.com/daffashafwan/vaxin-service/business/events"
+	_eventController "github.com/daffashafwan/vaxin-service/deliveries/events"
+	_eventRepository "github.com/daffashafwan/vaxin-service/repository/event"
+	_eventdb "github.com/daffashafwan/vaxin-service/repository/event"
+
+	_vaccinationUsecase "github.com/daffashafwan/vaxin-service/business/vaccinations"
+	_vaccinationController "github.com/daffashafwan/vaxin-service/deliveries/vaccinations"
+	_vaccinationRepository "github.com/daffashafwan/vaxin-service/repository/vaccination"
+	_vaccinationdb "github.com/daffashafwan/vaxin-service/repository/vaccination"
+
 	"github.com/daffashafwan/vaxin-service/app/routes"
 
 	"log"
@@ -53,7 +63,9 @@ func DbMigrate(db *gorm.DB) {
 		&_userdb.User{},
 		&_admindb.Admin{},
 		&_vaccinedb.Vaccine{},
-		&_facilitydb.Facility{})
+		&_facilitydb.Facility{},
+		&_eventdb.Event{},
+		&_vaccinationdb.Vaccination{})
 }
 
 func main() {
@@ -98,12 +110,22 @@ func main() {
 	facilityUseCase := _facilityUsecase.NewFacilityUsecase(facilityRepository, timeoutContext, configJWT)
 	facilityController := _facilityController.NewFacilityController(facilityUseCase)
 
+	eventRepository := _eventRepository.CreateEventRepo(Conn)
+	eventUseCase := _eventUsecase.NewEventUsecase(eventRepository, timeoutContext, configJWT)
+	eventController := _eventController.NewEventController(eventUseCase)
+
+	vaccinationRepository := _vaccinationRepository.CreateVaccinationRepo(Conn)
+	vaccinationUseCase := _vaccinationUsecase.NewVaccinationUsecase(vaccinationRepository, timeoutContext, configJWT)
+	vaccinationController := _vaccinationController.NewVaccinationController(vaccinationUseCase, eventUseCase)
+
 	routesInit := routes.ControllerList{
-		JwtConfig:       configJWT.Init(),
-		UserController:  *userController,
-		AdminController: *adminController,
-		VaccineController: *vaccineController,
+		JwtConfig:          configJWT.Init(),
+		UserController:     *userController,
+		AdminController:    *adminController,
+		VaccineController:  *vaccineController,
 		FacilityController: *facilityController,
+		EventController:    *eventController,
+		VaccinationsController: *vaccinationController,
 	}
 
 	routesInit.RouteRegister(e)

@@ -12,8 +12,8 @@ type FacilityResponse struct {
 	Latitude  string    `json:"latitude"`
 	Longitude string    `json:"longitude"`
 	UrlMaps   string    `json:"url_maps"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func FromDomain(domain facilities.Domain) FacilityResponse {
