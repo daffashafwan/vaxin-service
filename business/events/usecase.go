@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"time"
+
 	"github.com/daffashafwan/vaxin-service/app/middlewares"
 )
 
@@ -93,6 +94,23 @@ func (ic *EventUsecase) UpdateQuota(ctx context.Context, domain Domain, id int) 
 	event.Id = id
 	event.Quota = domain.Quota
 	events, err := ic.Repo.UpdateQuota(ctx, event)
+	if err != nil {
+		return Domain{}, err
+	}
+	events.Facility = event.Facility
+	events.Vaccine = event.Vaccine
+
+	return events, nil
+}
+
+func (ic *EventUsecase) UpdateQueue(ctx context.Context, domain Domain, id int) (Domain, error) {
+	event, errs := ic.Repo.GetById(ctx, id)
+	if errs != nil {
+		return Domain{}, errs
+	}
+	event.Id = id
+	event.Queue = domain.Queue
+	events, err := ic.Repo.UpdateQueue(ctx, event)
 	if err != nil {
 		return Domain{}, err
 	}

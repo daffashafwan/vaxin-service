@@ -7,6 +7,7 @@ import (
 	"github.com/daffashafwan/vaxin-service/deliveries/facilities"
 	"github.com/daffashafwan/vaxin-service/deliveries/users"
 	"github.com/daffashafwan/vaxin-service/deliveries/vaccines"
+	"github.com/daffashafwan/vaxin-service/deliveries/vaccinations"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -18,6 +19,7 @@ type ControllerList struct {
 	VaccineController  vaccines.VaccineController
 	FacilityController facilities.FacilityController
 	EventController    events.EventController
+	VaccinationsController vaccinations.VaccinationController
 }
 
 func (cl *ControllerList) RouteRegister(e *echo.Echo) {
@@ -97,4 +99,29 @@ func (cl *ControllerList) RouteRegister(e *echo.Echo) {
 	
 	//delete
 	e.DELETE("events/:eid", cl.EventController.Delete, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+
+
+	//VACCINATONS
+	//getAll
+	e.GET("/:id/vaccinations", cl.VaccinationsController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
+	e.GET("vaccinations", cl.VaccinationsController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+
+	//getAll
+	e.GET("/:id/vaccinations", cl.VaccinationsController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
+	e.GET("vaccinations", cl.VaccinationsController.GetAll, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+
+	//getById
+	e.GET("/:id/vaccinations/:vcid", cl.VaccinationsController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
+	e.GET("vaccinations/:vcid", cl.VaccinationsController.GetById, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+
+	//getByUserId
+	e.GET("/:id/vaccinations/user/:uid", cl.VaccinationsController.GetByUserId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
+	e.GET("vaccinations/user/:uid", cl.VaccinationsController.GetByUserId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+
+	//getByEventId
+	e.GET("/:id/vaccinations/event/:eid", cl.VaccinationsController.GetByEventId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
+	e.GET("vaccinations/event/:eid", cl.VaccinationsController.GetByEventId, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsAdmin)
+
+	//create
+	e.POST("/:id/vaccinations", cl.VaccinationsController.Create, middleware.JWTWithConfig(cl.JwtConfig), middlewares.IsUserId)
 }

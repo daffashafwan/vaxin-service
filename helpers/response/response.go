@@ -1,6 +1,8 @@
 package response
 
-import echo "github.com/labstack/echo/v4"
+import (
+	echo "github.com/labstack/echo/v4"
+)
 
 type SuccessResp struct {
 	SuccessCode int `json:"successCode"`

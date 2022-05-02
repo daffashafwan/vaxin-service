@@ -5,6 +5,7 @@ import "errors"
 var (
 	ErrUsernameRequired         = errors.New("username required")
 	ErrUsernameAlreadyExisted   = errors.New("username already existed")
+	ErrDataAlreadyExisted       = errors.New("data already existed")
 	ErrNotFound                 = errors.New("data not found")
 	ErrIDNotFound               = errors.New("id not found")
 	ErrInvalidId                = errors.New("invalid id, id not numeric")
